@@ -3,6 +3,7 @@ package com.example.udem1
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.example.udem1.databinding.ActivityMainBinding
 import com.example.udem1.utilities.correctNumber
@@ -21,17 +22,16 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "Поиск: $countryName", Toast.LENGTH_LONG).show()
 
             lifecycleScope.launch {
-                try {
-                val countries = restCountriesApi.getCountryByName(countryName)
-                val country = countries[0]
+                    val countries = restCountriesApi.getCountryByName(countryName)
+                    val country = countries[0]
                     binding.countyNameTextView.text = country.name.common.toString()
                     binding.capitalNameTextView.text = country.capital[0].toString()
                     binding.populationTextView.text = correctNumber( country.population ) + " человек."
                     binding.areaTextView.text = correctNumber( country.area.toLong() ) + " кв.км."
                     binding.regionTextView.text = country.region.toString()
                     loadSvg(binding.countryFlagImageview, country.flags.svg)
-                }  catch (e: Exception) { println(e)}
-
+                    binding.searchLayout.isVisible = false
+                    binding.resultLayout.isVisible = true
             }
         }
     }
